@@ -59,11 +59,18 @@ Choose one after auditing the codebase:
 2. `Historical market intelligence`
    Add provider/model price history, change tracking, and “what changed” UI.
 
-3. `Portfolio finance layer`
-   Add margin targets, budget thresholds, overrun warnings, and product-tier pricing logic.
+3. `Non-token cost modeling`
+   Add latency, retrieval, grounding, and tool-API cost estimation.
 
 4. `Scenario versioning`
    Add stack comparison history, scenario diffing, and “before/after optimization” views.
+
+## Implemented milestones
+
+- Routing builder and multi-model routing stacks
+- Benchmark scoring and model leaderboards
+- Portfolio planning with margin targets and budget guardrails
+- Forecast screen with 12-month projection table and overrun detection
 
 ## Suggested first response from Claude Code
 

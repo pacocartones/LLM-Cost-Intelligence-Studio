@@ -131,6 +131,16 @@ Responsibilities:
 - multi-workload planning view
 - compare product lines and saved routing deployments together
 - simple scaling multiplier for teams/business units
+- margin targets and budget thresholds
+- overrun warnings with contributor breakdown
+- implied margin calculation
+
+### Forecast
+
+- translate request-level economics into growth and budget planning
+- budget guardrail banner with headroom meter
+- margin insights generated from budget, growth, and target-margin inputs
+- 12-month projection table with overrun highlighting
 
 ## Persistence
 
@@ -171,5 +181,4 @@ Vite uses the GitHub Pages base path in:
 1. shared/exportable planning artifacts
 2. historical pricing and catalog change tracking
 3. richer benchmark methodology and scenario scoring transparency
-4. portfolio-level margin and budget guardrails
-5. non-token cost modeling
+4. non-token cost modeling

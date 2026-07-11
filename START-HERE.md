@@ -2,7 +2,7 @@
 
 This project is no longer a blank Phase 1 starter.
 
-It already has a live deployed product, verified pricing catalog coverage, saved routing stacks, benchmark scoring, and a portfolio view.
+It already has a live deployed product, verified pricing catalog coverage, saved routing stacks, benchmark scoring, portfolio planning with margin guardrails, and forecast projections.
 
 Live demo:
 

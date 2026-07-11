@@ -138,3 +138,46 @@ export interface BenchmarkScore {
   monthly: number
   summary: string
 }
+
+export interface MarginInsight {
+  tone: 'healthy' | 'tight' | 'overrun'
+  title: string
+  body: string
+  budgetPercent: number
+}
+
+export interface MarginSnapshot {
+  tone: 'healthy' | 'tight' | 'overrun'
+  monthlyTotal: number
+  annualTotal: number
+  headroom: number
+  headroomPercent: number
+  overrunAmount: number
+  overrunItems: string[]
+  insights: MarginInsight[]
+}
+
+export interface ForecastProjection {
+  month: number
+  cost: number
+  withinBudget: boolean
+  headroom: number
+}
+
+export interface ScenarioWithBudget {
+  id: string
+  label: string
+  monthly: number
+  annual: number
+  budget: number
+  headroom: number
+  headroomPercent: number
+  overrun: boolean
+}
+
+export interface FinanceInput {
+  monthlyBudget: number
+  targetMarginPercent: number
+  growthRatePercent: number
+  growthPosture: 'conservative' | 'launch' | 'aggressive'
+}

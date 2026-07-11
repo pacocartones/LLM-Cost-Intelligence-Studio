@@ -1622,6 +1622,233 @@ select:focus {
   justify-content: center;
 }
 
+/* Finance layer — guardrail banners */
+.guardrail-banner,
+.margin-banner {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  border-radius: 20px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+}
+
+.guardrail-banner.ok,
+.margin-banner.ok {
+  background: linear-gradient(
+    180deg,
+    rgba(34, 197, 94, 0.12),
+    rgba(15, 23, 42, 0.55)
+  );
+  border-color: rgba(34, 197, 94, 0.22);
+}
+
+.guardrail-banner.warning,
+.margin-banner.warning {
+  background: linear-gradient(
+    180deg,
+    rgba(245, 158, 11, 0.12),
+    rgba(15, 23, 42, 0.55)
+  );
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.guardrail-banner.danger,
+.margin-banner.danger {
+  background: linear-gradient(
+    180deg,
+    rgba(239, 68, 68, 0.12),
+    rgba(15, 23, 42, 0.55)
+  );
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+.guardrail-banner strong,
+.margin-banner strong {
+  display: block;
+  font-size: 1.15rem;
+  margin-top: 4px;
+}
+
+.guardrail-banner p,
+.margin-banner p {
+  color: var(--muted);
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+}
+
+.guardrail-banner__meter,
+.margin-banner__meter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 160px;
+  text-align: right;
+}
+
+.guardrail-banner__meter span,
+.margin-banner__meter span {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.guardrail-meter__fill,
+.margin-meter__fill {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 200ms ease;
+}
+
+.guardrail-banner.danger .guardrail-meter__fill,
+.margin-banner.danger .margin-meter__fill {
+  background: #ef4444;
+}
+
+.guardrail-banner.warning .guardrail-meter__fill,
+.margin-banner.warning .margin-meter__fill {
+  background: #f59e0b;
+}
+
+.guardrail-banner.ok .guardrail-meter__fill,
+.margin-banner.ok .margin-meter__fill {
+  background: #22c55e;
+}
+
+.finance-slider-card {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 16px;
+}
+
+.finance-slider-card input[type='range'] {
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+/* Projection table */
+.projection-section {
+  margin-bottom: 18px;
+}
+
+.projection-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.projection-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+
+.projection-table th {
+  text-align: left;
+  padding: 12px 16px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.projection-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06);
+  white-space: nowrap;
+}
+
+.projection-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.projection-table .overrun-row {
+  color: #fca5a5;
+}
+
+.projection-table .good {
+  color: var(--good);
+}
+
+/* Margin card for portfolio */
+.margin-card {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.5);
+  margin-bottom: 16px;
+}
+
+.margin-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.margin-card__header span {
+  color: var(--muted);
+}
+
+.margin-card__header strong {
+  font-size: 1.3rem;
+}
+
+.margin-card__body {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.margin-card__body div {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.36);
+}
+
+.margin-card__body span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.margin-card__body strong {
+  display: block;
+  margin-top: 6px;
+}
+
+/* Budget share indicator */
+.budget-share-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}
+
+.budget-share-indicator.healthy {
+  background: rgba(34, 197, 94, 0.12);
+  color: #bbf7d0;
+}
+
+.budget-share-indicator.tight {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fde68a;
+}
+
+.budget-share-indicator.overrun {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+
 .forecast-band {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
