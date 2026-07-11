@@ -46,3 +46,8 @@ MIT.
 ## Contributing
 
 Issues and small docs/PRs are welcome.
+
+
+## Acknowledgments
+
+Built with assistance from [Claude](https://claude.ai) (Anthropic) for code scaffolding, pricing research, and documentation.
