@@ -7,12 +7,14 @@ import {
   routingSlotsEqual,
   sanitizeRoutingSlots,
 } from '../lib/routing'
+import { ShareButton } from '../components/ShareButton'
 import type {
   ModelRecord,
   RoutingRoleId,
   RoutingSlotInput,
   SavedRoutingStack,
   ScenarioInput,
+  ShareableArtifact,
 } from '../types/domain'
 
 type DecisionMode = 'cheapest' | 'balanced' | 'context' | 'premium'
@@ -99,6 +101,7 @@ interface CompareScreenProps {
   routingPreset: SavedRoutingStack | null
   onSaveRoutingStack: (draft: { name: string; slots: RoutingSlotInput[] }) => void
   onLoadRoutingStack: (stack: SavedRoutingStack) => void
+  shareArtifact: ShareableArtifact
 }
 
 export function CompareScreen({
@@ -110,6 +113,7 @@ export function CompareScreen({
   routingPreset,
   onSaveRoutingStack,
   onLoadRoutingStack,
+  shareArtifact,
 }: CompareScreenProps) {
   const [mode, setMode] = useState<DecisionMode>('balanced')
   const [routingSlots, setRoutingSlots] = useState<RoutingSlotInput[]>([])
@@ -336,9 +340,12 @@ export function CompareScreen({
               onChange={(event) => setRoutingName(event.target.value)}
             />
           </label>
-          <button type="button" className="ghost-button" onClick={saveCurrentRoutingStack}>
-            Save routing stack
-          </button>
+          <div className="share-group">
+            <button type="button" className="ghost-button" onClick={saveCurrentRoutingStack}>
+              Save routing stack
+            </button>
+            <ShareButton artifact={shareArtifact} />
+          </div>
         </div>
 
         <div className={`routing-notice ${routingBlueprint.totalShare === 100 ? 'good' : ''}`}>

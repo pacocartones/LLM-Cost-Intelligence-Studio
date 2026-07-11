@@ -76,3 +76,93 @@ ul {
 a {
   color: inherit;
 }
+
+/* Print stylesheet */
+@media print {
+  .site-header,
+  .site-footer,
+  .section-nav,
+  .model-picker,
+  .share-group,
+  .viewer-actions,
+  .topbar,
+  .overview-band,
+  .trust-band,
+  .hero-action-row,
+  .share-group,
+  .notice,
+  .mode-strip,
+  .forecast-controls,
+  .forecast-mode-strip,
+  .finance-slider-card,
+  .guardrail-banner,
+  .margin-banner,
+  .insight-stack,
+  .plan-brief,
+  .shape-panel,
+  .token-grid,
+  .field-grid,
+  .toggle-row,
+  .provider-pills,
+  .provider-summary,
+  .model-grid,
+  .compare-grid,
+  .template-grid,
+  .optimize-grid,
+  .projection-grid,
+  .forecast-band,
+  .portfolio-controls,
+  .portfolio-selector-grid,
+  .portfolio-grid,
+  .saved-routing-panel,
+  .ambition-panel,
+  .benchmark-panel,
+  .benchmark-lab,
+  .explore-hero,
+  .sticky-rail,
+  .recent-scenarios,
+  .preview {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .panel {
+    border: 1px solid #ccc !important;
+    background: white !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .viewer-section,
+  .viewer-stats-grid div,
+  .viewer-table td,
+  .viewer-table th {
+    border-color: #ddd !important;
+  }
+
+  .viewer-stats-grid span,
+  .viewer-table th {
+    color: #555 !important;
+  }
+
+  .viewer-stats-grid strong,
+  .viewer-table td strong {
+    color: black !important;
+  }
+
+  .viewer-table {
+    page-break-inside: auto;
+  }
+
+  .viewer-table tr {
+    page-break-inside: avoid;
+  }
+
+  @page {
+    margin: 1.5cm;
+  }
+}

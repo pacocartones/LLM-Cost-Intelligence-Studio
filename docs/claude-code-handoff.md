@@ -71,6 +71,7 @@ Choose one after auditing the codebase:
 - Benchmark scoring and model leaderboards
 - Portfolio planning with margin targets and budget guardrails
 - Forecast screen with 12-month projection table and overrun detection
+- Exportable planning artifacts: URL-encoded sharing, print view, JSON export
 
 ## Suggested first response from Claude Code
 

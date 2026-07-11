@@ -3,10 +3,12 @@ import type {
   ModelRecord,
   Provider,
   ScenarioInput,
+  ShareableArtifact,
   UseCaseTemplate,
 } from '../types/domain'
 import type { Insight } from '../lib/insights'
 import { buildTokenSlices, describeScenarioShape } from '../lib/scenario-shape'
+import { ShareButton } from '../components/ShareButton'
 
 interface PlanScreenProps {
   provider: Provider
@@ -25,6 +27,7 @@ interface PlanScreenProps {
   onScenarioChange: (patch: Partial<ScenarioInput>) => void
   onSaveScenario: () => void
   onApplyTemplate: (template: UseCaseTemplate) => void
+  shareArtifact: ShareableArtifact
 }
 
 function getPlanningNarrative(
@@ -64,6 +67,7 @@ export function PlanScreen({
   onScenarioChange,
   onSaveScenario,
   onApplyTemplate,
+  shareArtifact,
 }: PlanScreenProps) {
   const tokenSlices = buildTokenSlices(scenario)
   const scenarioShape = describeScenarioShape(scenario)
@@ -79,9 +83,12 @@ export function PlanScreen({
             <p className="eyebrow">Scenario planning</p>
             <h2>Plan request and scenario economics</h2>
           </div>
-          <button type="button" className="ghost-button" onClick={onSaveScenario}>
-            Save scenario
-          </button>
+          <div className="share-group">
+            <button type="button" className="ghost-button" onClick={onSaveScenario}>
+              Save scenario
+            </button>
+            <ShareButton artifact={shareArtifact} />
+          </div>
         </div>
 
         <div className="preset-strip">

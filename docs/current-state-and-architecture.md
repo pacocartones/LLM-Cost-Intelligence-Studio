@@ -142,6 +142,12 @@ Responsibilities:
 - margin insights generated from budget, growth, and target-margin inputs
 - 12-month projection table with overrun highlighting
 
+### Artifacts and sharing
+
+- URL-encoded share links that reconstruct a planning state
+- Printable report view with clean typography
+- JSON export for offline archival
+
 ## Persistence
 
 Local storage keys currently used:

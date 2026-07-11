@@ -3,11 +3,13 @@ import { resolveTemplateScenario, evaluateBenchmarkModel, evaluateRoutingBenchma
 import { calculateScenarioCost } from '../lib/costing'
 import { buildRoutingMixFromCatalog } from '../lib/routing'
 import { computeMarginSnapshot } from '../lib/finance'
+import { ShareButton } from '../components/ShareButton'
 import type {
   ModelRecord,
   SavedRoutingStack,
   UseCaseTemplate,
   FinanceInput,
+  ShareableArtifact,
 } from '../types/domain'
 
 interface PortfolioScreenProps {
@@ -16,6 +18,7 @@ interface PortfolioScreenProps {
   savedRoutingStacks: SavedRoutingStack[]
   onApplyTemplate: (template: UseCaseTemplate) => void
   onLoadRoutingStack: (stack: SavedRoutingStack) => void
+  shareArtifact: ShareableArtifact
 }
 
 export function PortfolioScreen({
@@ -24,6 +27,7 @@ export function PortfolioScreen({
   savedRoutingStacks,
   onApplyTemplate,
   onLoadRoutingStack,
+  shareArtifact,
 }: PortfolioScreenProps) {
   const [teamMultiplier, setTeamMultiplier] = useState(2)
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<string[]>(
@@ -252,6 +256,11 @@ export function PortfolioScreen({
             <strong>{teamMultiplier} teams / product units</strong>
           </div>
         </div>
+      </div>
+
+      {/* Share controls */}
+      <div className="share-group">
+        <ShareButton artifact={shareArtifact} />
       </div>
 
       {/* Margin banner */}

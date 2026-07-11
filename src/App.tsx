@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import { ModelPicker } from './components/ModelPicker'
 import { RecentScenarios } from './components/RecentScenarios'
 import { SectionNav } from './components/SectionNav'
+import { ArtifactViewer } from './components/ArtifactViewer'
 import { defaultScenario, models, providers } from './data/catalog'
 import { useCaseTemplates } from './data/templates'
 import { calculateScenarioCost } from './lib/costing'
 import { buildScenarioInsights } from './lib/insights'
 import { getCatalogHealthCounts, rankModelsForScenario } from './lib/market'
 import { buildOptimizationPlan } from './lib/optimizer'
+import { resolveTemplateScenario } from './lib/benchmarks'
+import { buildRoutingMixFromCatalog } from './lib/routing'
+import { decodeShareData, clearShareFromUrl } from './lib/share'
 import { CompareScreen } from './screens/CompareScreen'
 import { ExploreScreen } from './screens/ExploreScreen'
 import { ForecastScreen } from './screens/ForecastScreen'
@@ -21,6 +25,7 @@ import type {
   SavedScenario,
   SavedRoutingStack,
   ScenarioInput,
+  ShareableArtifact,
   UseCaseTemplate,
   ViewId,
 } from './types/domain'
@@ -71,6 +76,27 @@ function App() {
     loadSavedRoutingStacks(),
   )
   const [routingPreset, setRoutingPreset] = useState<SavedRoutingStack | null>(null)
+  const [shareData, setShareData] = useState<ShareableArtifact | null>(() => decodeShareData())
+
+  // Portfolio state (shared with PortfolioScreen)
+  const [teamMultiplier, _setTeamMultiplier] = useState(2)
+  const [selectedTemplateIds, _setSelectedTemplateIds] = useState<string[]>(
+    useCaseTemplates.slice(0, 3).map((template) => template.id),
+  )
+  const [selectedStackIds, _setSelectedStackIds] = useState<string[]>(
+    savedRoutingStacks.slice(0, 2).map((stack) => stack.id),
+  )
+
+  useEffect(() => {
+    if (shareData) {
+      setActiveView('plan')
+    }
+  }, [shareData])
+
+  function clearShare() {
+    setShareData(null)
+    clearShareFromUrl()
+  }
 
   useEffect(() => {
     const nextModel = models.find((model) => model.id === selectedModelId)
@@ -120,8 +146,119 @@ function App() {
       ? Math.round((catalogHealth.verifiedModels / catalogHealth.modelCount) * 100)
       : 0
   const cheapestScenarioModel = rankedModels[0]
+  const allPortfolioItems: Array<{ id: string; label: string; monthly: number; annual: number; type: 'template' | 'stack' }> = useMemo(
+    () => {
+      const templateItems = useCaseTemplates
+        .filter((template) => selectedTemplateIds.includes(template.id))
+        .map((template) => {
+          const model =
+            models.find((entry) => entry.id === template.suggestedModelIds[0]) ??
+            models[0]
+          const scenario = resolveTemplateScenario(template)
+          const sc = calculateScenarioCost(model, scenario)
+
+          return {
+            id: template.id,
+            label: template.name,
+            monthly: sc.monthlyRecurring * teamMultiplier,
+            annual: sc.monthlyRecurring * 12 * teamMultiplier,
+            type: 'template' as const,
+          }
+        })
+      const stackItems = savedRoutingStacks
+        .filter((stack) => selectedStackIds.includes(stack.id))
+        .map((stack) => {
+          const cost = buildRoutingMixFromCatalog(models, stack.scenario, stack.slots)
+          return {
+            id: stack.id,
+            label: stack.name,
+            monthly: cost.blendedMonthly * teamMultiplier,
+            annual: cost.blendedMonthly * 12 * teamMultiplier,
+            type: 'stack' as const,
+          }
+        })
+      return [...templateItems, ...stackItems]
+    },
+    [
+      models,
+      savedRoutingStacks,
+      selectedTemplateIds,
+      selectedStackIds,
+      teamMultiplier,
+    ],
+  )
+
   const repoUrl = 'https://github.com/pacocartones/LLM-Cost-Intelligence-Studio'
   const liveDemoUrl = 'https://pacocartones.github.io/LLM-Cost-Intelligence-Studio/'
+
+  const planShareArtifact: ShareableArtifact = {
+    version: 1,
+    scenario: {
+      name: scenario.name,
+      systemTokens: scenario.systemTokens,
+      userTokens: scenario.userTokens,
+      retrievedTokens: scenario.retrievedTokens,
+      toolTokens: scenario.toolTokens,
+      cachedTokens: scenario.cachedTokens,
+      outputTokens: scenario.outputTokens,
+      requestsPerDay: scenario.requestsPerDay,
+      daysPerMonth: scenario.daysPerMonth,
+      activeUsers: scenario.activeUsers,
+      useBatch: scenario.useBatch,
+      useCaching: scenario.useCaching,
+    },
+    routingSlots: routingPreset?.slots ?? [],
+    portfolioItems: [],
+    createdAt: new Date().toISOString(),
+  }
+
+  const compareShareArtifact: ShareableArtifact = {
+    version: 1,
+    scenario: {
+      name: scenario.name,
+      systemTokens: scenario.systemTokens,
+      userTokens: scenario.userTokens,
+      retrievedTokens: scenario.retrievedTokens,
+      toolTokens: scenario.toolTokens,
+      cachedTokens: scenario.cachedTokens,
+      outputTokens: scenario.outputTokens,
+      requestsPerDay: scenario.requestsPerDay,
+      daysPerMonth: scenario.daysPerMonth,
+      activeUsers: scenario.activeUsers,
+      useBatch: scenario.useBatch,
+      useCaching: scenario.useCaching,
+    },
+    routingSlots: routingPreset?.slots ?? [],
+    portfolioItems: [],
+    createdAt: new Date().toISOString(),
+  }
+
+  const portfolioShareArtifact: ShareableArtifact = {
+    version: 1,
+    scenario: {
+      name: scenario.name,
+      systemTokens: scenario.systemTokens,
+      userTokens: scenario.userTokens,
+      retrievedTokens: scenario.retrievedTokens,
+      toolTokens: scenario.toolTokens,
+      cachedTokens: scenario.cachedTokens,
+      outputTokens: scenario.outputTokens,
+      requestsPerDay: scenario.requestsPerDay,
+      daysPerMonth: scenario.daysPerMonth,
+      activeUsers: scenario.activeUsers,
+      useBatch: scenario.useBatch,
+      useCaching: scenario.useCaching,
+    },
+    routingSlots: routingPreset?.slots ?? [],
+    portfolioItems: allPortfolioItems.map((item) => ({
+      id: item.id,
+      label: item.label,
+      monthly: item.monthly,
+      annual: item.annual,
+      type: item.type,
+    })),
+    createdAt: new Date().toISOString(),
+  }
 
   function updateScenario(patch: Partial<ScenarioInput>) {
     setRoutingPreset(null)
@@ -348,6 +485,10 @@ function App() {
         />
 
         <main className="content-stack">
+          {shareData ? (
+            <ArtifactViewer data={shareData} onBack={clearShare} />
+          ) : null}
+
           {activeView === 'plan' ? (
             <>
               <PlanScreen
@@ -371,6 +512,7 @@ function App() {
                 onScenarioChange={updateScenario}
                 onSaveScenario={saveScenario}
                 onApplyTemplate={applyTemplate}
+                shareArtifact={planShareArtifact}
               />
               <RecentScenarios scenarios={savedScenarios} onLoad={loadScenario} />
             </>
@@ -386,6 +528,7 @@ function App() {
               routingPreset={routingPreset}
               onSaveRoutingStack={saveRoutingStack}
               onLoadRoutingStack={loadRoutingStack}
+              shareArtifact={compareShareArtifact}
             />
           ) : null}
 
@@ -417,6 +560,7 @@ function App() {
               savedRoutingStacks={savedRoutingStacks}
               onApplyTemplate={applyTemplate}
               onLoadRoutingStack={loadRoutingStack}
+              shareArtifact={portfolioShareArtifact}
             />
           ) : null}
         </main>

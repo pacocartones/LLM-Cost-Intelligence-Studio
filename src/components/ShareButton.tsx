@@ -1,0 +1,42 @@
+import { useState } from 'react'
+import { encodeShareUrl } from '../lib/share'
+import { exportArtifactToJson } from '../lib/share'
+import type { ShareableArtifact } from '../types/shareable'
+
+interface ShareButtonProps {
+  artifact: ShareableArtifact
+}
+
+export function ShareButton({ artifact }: ShareButtonProps) {
+  const [copied, setCopied] = useState(false)
+
+  function handleCopyLink() {
+    const url = encodeShareUrl(artifact)
+    navigator.clipboard.writeText(url).catch(() => {})
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2500)
+  }
+
+  function handleDownloadJson() {
+    exportArtifactToJson(artifact)
+  }
+
+  return (
+    <div className="share-group">
+      <button
+        type="button"
+        className="ghost-button"
+        onClick={handleCopyLink}
+      >
+        {copied ? 'Link copied!' : 'Copy share link'}
+      </button>
+      <button
+        type="button"
+        className="ghost-button"
+        onClick={handleDownloadJson}
+      >
+        Export JSON
+      </button>
+    </div>
+  )
+}
