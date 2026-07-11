@@ -2,6 +2,10 @@
 
 LLM Cost Intelligence Studio is a product for estimating, comparing, optimizing, and forecasting AI model costs across providers, use cases, and workflow architectures.
 
+Live demo: https://pacocartones.github.io/LLM-Cost-Intelligence-Studio/
+
+The app is deployed automatically to GitHub Pages from `main` via GitHub Actions.
+
 ## Project structure
 
 - `docs/` product strategy, build brief, and phased roadmap
@@ -24,4 +28,3 @@ Start with **Phase 1** only:
 - saved scenarios
 
 Do not overbuild advanced analytics yet.
-
