@@ -37,6 +37,25 @@ export function ArtifactViewer({ data, onBack }: ArtifactViewerProps) {
         </div>
       </div>
 
+      <div className="viewer-band">
+        <div>
+          <span>Total request tokens</span>
+          <strong>{totalTokens.toLocaleString()}</strong>
+        </div>
+        <div>
+          <span>Routing entries</span>
+          <strong>{data.routingSlots.length}</strong>
+        </div>
+        <div>
+          <span>Portfolio items</span>
+          <strong>{data.portfolioItems.length}</strong>
+        </div>
+        <div>
+          <span>Shared artifact</span>
+          <strong>{data.version === 1 ? 'Current format' : 'Legacy format'}</strong>
+        </div>
+      </div>
+
       <div className="viewer-date">
         <span>Created</span>
         <strong>{new Date(data.createdAt).toLocaleDateString('en-US', {

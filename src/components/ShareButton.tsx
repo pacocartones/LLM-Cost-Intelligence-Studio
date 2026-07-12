@@ -22,21 +22,27 @@ export function ShareButton({ artifact }: ShareButtonProps) {
   }
 
   return (
-    <div className="share-group">
-      <button
-        type="button"
-        className="ghost-button"
-        onClick={handleCopyLink}
-      >
-        {copied ? 'Link copied!' : 'Copy share link'}
-      </button>
-      <button
-        type="button"
-        className="ghost-button"
-        onClick={handleDownloadJson}
-      >
-        Export JSON
-      </button>
+    <div className="share-panel">
+      <div className="share-panel__copy">
+        <span>Share or export</span>
+        <small>Send a live URL or keep a JSON snapshot of this planning state.</small>
+      </div>
+      <div className="share-group">
+        <button
+          type="button"
+          className="ghost-button"
+          onClick={handleCopyLink}
+        >
+          {copied ? 'Link copied!' : 'Copy share link'}
+        </button>
+        <button
+          type="button"
+          className="ghost-button"
+          onClick={handleDownloadJson}
+        >
+          Export JSON
+        </button>
+      </div>
     </div>
   )
 }

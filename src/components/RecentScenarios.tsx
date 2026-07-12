@@ -29,6 +29,9 @@ export function RecentScenarios({ scenarios, onLoad }: RecentScenariosProps) {
           <p className="eyebrow">Recent scenarios</p>
           <h3>Seed your product thinking with examples</h3>
         </div>
+        <p className="muted-copy recent-scenarios__summary">
+          Reopen something realistic instead of rebuilding the same starting point every time.
+        </p>
       </div>
 
       <div className="scenario-list">

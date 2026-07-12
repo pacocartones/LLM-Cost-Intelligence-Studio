@@ -94,6 +94,80 @@ const viewSpotlights: Record<
   },
 }
 
+const heroContentByView: Record<
+  ViewId,
+  {
+    eyebrow: string
+    title: string
+    body: string
+    primaryLabel: string
+    primaryView: ViewId
+    secondaryLabel: string
+    secondaryView: ViewId
+  }
+> = {
+  plan: {
+    eyebrow: 'Verified pricing intelligence',
+    title: 'Model realistic AI workloads before you pick the model.',
+    body:
+      'Start with the shape of the product, not a vague token guess. Then move into compare, routing, optimization, and budget stress-testing.',
+    primaryLabel: 'Start scenario planning',
+    primaryView: 'plan',
+    secondaryLabel: 'Explore product patterns',
+    secondaryView: 'explore',
+  },
+  compare: {
+    eyebrow: 'Default-model decision',
+    title: 'Compare candidates and design the traffic path you actually want to ship.',
+    body:
+      'This is where the product stops being a calculator and becomes a model policy tool for defaults, fallbacks, and premium moments.',
+    primaryLabel: 'Review routing options',
+    primaryView: 'compare',
+    secondaryLabel: 'Forecast scale impact',
+    secondaryView: 'forecast',
+  },
+  optimize: {
+    eyebrow: 'Savings workbench',
+    title: 'Turn cost signals into a prioritized optimization sprint.',
+    body:
+      'Use this area to decide what to fix first: prompt length, retrieval discipline, caching, routing, or model tier selection.',
+    primaryLabel: 'Open action board',
+    primaryView: 'optimize',
+    secondaryLabel: 'Compare alternatives',
+    secondaryView: 'compare',
+  },
+  explore: {
+    eyebrow: 'Pattern library',
+    title: 'Browse proven AI product patterns instead of starting from a blank sheet.',
+    body:
+      'Templates and benchmark packs help teams reason from concrete product shapes like support, coding, research, tutoring, and sales.',
+    primaryLabel: 'Browse templates',
+    primaryView: 'explore',
+    secondaryLabel: 'Load into planning',
+    secondaryView: 'plan',
+  },
+  forecast: {
+    eyebrow: 'Finance and growth',
+    title: 'See how fast the current product plan pushes into budget pressure.',
+    body:
+      'Forecast connects request economics to monthly burn, annual exposure, and the moment where growth breaks the current operating model.',
+    primaryLabel: 'Stress-test growth',
+    primaryView: 'forecast',
+    secondaryLabel: 'Review portfolio',
+    secondaryView: 'portfolio',
+  },
+  portfolio: {
+    eyebrow: 'Allocation board',
+    title: 'Decide which products deserve budget and which ones dominate the burn.',
+    body:
+      'Portfolio mode makes the product useful for leadership reviews, capital allocation, and comparing multiple workloads at once.',
+    primaryLabel: 'Review portfolio',
+    primaryView: 'portfolio',
+    secondaryLabel: 'Return to planning',
+    secondaryView: 'plan',
+  },
+}
+
 function loadSavedScenarios() {
   const raw = window.localStorage.getItem(savedScenariosKey)
   if (!raw) return [] as SavedScenario[]
@@ -280,6 +354,7 @@ function App() {
     ? Math.max(0, currentCost.monthlyRecurring - alternativeModel.recurring * scenario.requestsPerDay * scenario.daysPerMonth)
     : 0
   const activeViewSpotlight = viewSpotlights[activeView]
+  const activeHeroContent = heroContentByView[activeView]
   const showHomeScaffold = activeView === 'plan' && !shareData
   const showModelPicker =
     !shareData &&
@@ -486,12 +561,10 @@ function App() {
       <div className="app-shell">
         <header className="topbar">
           <div className="topbar-main">
-            <p className="eyebrow">Verified pricing intelligence</p>
-            <h1 className="gradient-text">LLM Cost Intelligence Studio</h1>
+            <p className="eyebrow">{activeHeroContent.eyebrow}</p>
+            <h1 className="gradient-text">{activeHeroContent.title}</h1>
             <p className="hero-copy">
-              A multi-provider workspace for planning AI economics across Anthropic,
-              OpenAI, Gemini, Mistral, xAI, and DeepSeek with source-linked pricing,
-              comparison, optimization, benchmark exploration, and forecast workflows.
+              {activeHeroContent.body}
             </p>
             <div className="hero-pill-row">
               <span className="hero-pill">
@@ -504,16 +577,16 @@ function App() {
               <button
                 type="button"
                 className="ghost-button"
-                onClick={() => setActiveView('plan')}
+                onClick={() => setActiveView(activeHeroContent.primaryView)}
               >
-                Start scenario planning
+                {activeHeroContent.primaryLabel}
               </button>
               <button
                 type="button"
                 className="text-link"
-                onClick={() => setActiveView('explore')}
+                onClick={() => setActiveView(activeHeroContent.secondaryView)}
               >
-                Explore product patterns
+                {activeHeroContent.secondaryLabel}
               </button>
             </div>
           </div>

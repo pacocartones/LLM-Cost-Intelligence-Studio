@@ -28,6 +28,8 @@ export function ModelPicker({
 }: ModelPickerProps) {
   const providerModels = models.filter((model) => model.providerId === providerId)
   const provider = providers.find((entry) => entry.id === providerId)
+  const selectedModel =
+    providerModels.find((model) => model.id === selectedModelId) ?? providerModels[0]
 
   return (
     <section className="panel">
@@ -36,6 +38,10 @@ export function ModelPicker({
           <p className="eyebrow">Catalog</p>
           <h3>Provider and model selection</h3>
         </div>
+        <p className="muted-copy model-picker__summary">
+          Pick the provider family first, then choose the model that should anchor this
+          workflow before you compare routing or forecast spend.
+        </p>
       </div>
 
       <div className="provider-pills">
@@ -59,6 +65,10 @@ export function ModelPicker({
             </span>
             <strong>{provider.name}</strong>
             <p>{provider.summary}</p>
+            <div className="provider-summary__chips">
+              <span className="soft-badge">{providerModels.length} mapped models</span>
+              <span className="soft-badge">Source-linked pricing</span>
+            </div>
           </div>
           <div className="provider-summary__meta">
             <span>Last verified</span>
@@ -71,6 +81,39 @@ export function ModelPicker({
               <small>{provider.sourceLabel ?? 'Internal seed data'}</small>
             )}
           </div>
+        </div>
+      ) : null}
+
+      {selectedModel ? (
+        <div className="selected-model-summary">
+          <div className="selected-model-summary__copy">
+            <p className="eyebrow">Current model in focus</p>
+            <h4>{selectedModel.name}</h4>
+            <p>{selectedModel.summary}</p>
+            <div className="selected-model-summary__chips">
+              {selectedModel.recommendedFor.slice(0, 3).map((item) => (
+                <span key={item} className="soft-badge">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+          <dl className="selected-model-summary__stats">
+            <div>
+              <dt>Tier</dt>
+              <dd>{selectedModel.label}</dd>
+            </div>
+            <div>
+              <dt>Context</dt>
+              <dd>{selectedModel.contextWindowK}k</dd>
+            </div>
+            <div>
+              <dt>Input / Output</dt>
+              <dd>
+                ${selectedModel.inputPerMTok} / ${selectedModel.outputPerMTok}
+              </dd>
+            </div>
+          </dl>
         </div>
       ) : null}
 
