@@ -168,6 +168,32 @@ const heroContentByView: Record<
   },
 }
 
+const workspaceParts: Array<{
+  id: string
+  label: string
+  description: string
+  views: ViewId[]
+}> = [
+  {
+    id: 'foundation',
+    label: 'Foundation',
+    description: 'Define the workload and load realistic product patterns.',
+    views: ['plan', 'explore'],
+  },
+  {
+    id: 'decision',
+    label: 'Decision',
+    description: 'Choose defaults, route traffic, and sequence optimizations.',
+    views: ['compare', 'optimize'],
+  },
+  {
+    id: 'finance',
+    label: 'Finance',
+    description: 'Stress-test budgets and compare multiple bets side by side.',
+    views: ['forecast', 'portfolio'],
+  },
+]
+
 function loadSavedScenarios() {
   const raw = window.localStorage.getItem(savedScenariosKey)
   if (!raw) return [] as SavedScenario[]
@@ -355,6 +381,8 @@ function App() {
     : 0
   const activeViewSpotlight = viewSpotlights[activeView]
   const activeHeroContent = heroContentByView[activeView]
+  const activeWorkspacePart =
+    workspaceParts.find((part) => part.views.includes(activeView)) ?? workspaceParts[0]
   const showHomeScaffold = activeView === 'plan' && !shareData
   const showModelPicker =
     !shareData &&
@@ -528,8 +556,97 @@ function App() {
     setActiveView('compare')
   }
 
+  function renderActiveScreen() {
+    if (shareData) {
+      return <ArtifactViewer data={shareData} onBack={clearShare} />
+    }
+
+    if (activeView === 'plan') {
+      return (
+        <>
+          <PlanScreen
+            provider={selectedProvider}
+            model={selectedModel}
+            scenario={scenario}
+            cost={currentCost}
+            insights={insights}
+            costPer1kRequests={costPer1kRequests}
+            costPerUser={costPerUser}
+            alternativeModel={
+              alternativeModel
+                ? {
+                    name: alternativeModel.model.name,
+                    recurring: alternativeModel.recurring,
+                    delta: alternativeModel.deltaFromSelected,
+                  }
+                : null
+            }
+            templates={useCaseTemplates}
+            onScenarioChange={updateScenario}
+            onSaveScenario={saveScenario}
+            onApplyTemplate={applyTemplate}
+            shareArtifact={planShareArtifact}
+          />
+          <RecentScenarios scenarios={savedScenarios} onLoad={loadScenario} />
+        </>
+      )
+    }
+
+    if (activeView === 'compare') {
+      return (
+        <CompareScreen
+          models={models}
+          scenario={scenario}
+          selectedModelId={selectedModelId}
+          selectedProviderId={selectedProviderId}
+          savedRoutingStacks={savedRoutingStacks}
+          routingPreset={routingPreset}
+          onSaveRoutingStack={saveRoutingStack}
+          onLoadRoutingStack={loadRoutingStack}
+          shareArtifact={compareShareArtifact}
+        />
+      )
+    }
+
+    if (activeView === 'optimize') {
+      return (
+        <OptimizeScreen
+          model={selectedModel}
+          scenario={scenario}
+          insights={insights}
+          optimizationPlan={optimizationPlan}
+        />
+      )
+    }
+
+    if (activeView === 'explore') {
+      return (
+        <ExploreScreen
+          templates={useCaseTemplates}
+          models={models}
+          onApplyTemplate={applyTemplate}
+        />
+      )
+    }
+
+    if (activeView === 'forecast') {
+      return <ForecastScreen scenario={scenario} cost={currentCost} />
+    }
+
+    return (
+      <PortfolioScreen
+        templates={useCaseTemplates}
+        models={models}
+        savedRoutingStacks={savedRoutingStacks}
+        onApplyTemplate={applyTemplate}
+        onLoadRoutingStack={loadRoutingStack}
+        shareArtifact={portfolioShareArtifact}
+      />
+    )
+  }
+
   return (
-    <div className="site-shell">
+    <div className={`site-shell site-shell--${activeView}`}>
       <header className="site-header">
         <div className="site-header__inner">
           <button
@@ -710,6 +827,40 @@ function App() {
           </>
         ) : null}
 
+        {!shareData ? (
+          <section className="workspace-parts" aria-label="Workspace parts">
+            {workspaceParts.map((part) => {
+              const isActivePart = part.id === activeWorkspacePart.id
+              return (
+                <article
+                  key={part.id}
+                  className={`workspace-part-card workspace-part-card--${part.id} ${
+                    isActivePart ? 'active' : ''
+                  }`}
+                >
+                  <div className="workspace-part-card__header">
+                    <span>{part.label}</span>
+                    <strong>{part.views.length} views</strong>
+                  </div>
+                  <p>{part.description}</p>
+                  <div className="workspace-part-card__actions">
+                    {part.views.map((view) => (
+                      <button
+                        key={view}
+                        type="button"
+                        className={view === activeView ? 'active' : ''}
+                        onClick={() => setActiveView(view)}
+                      >
+                        {viewSpotlights[view].label}
+                      </button>
+                    ))}
+                  </div>
+                </article>
+              )
+            })}
+          </section>
+        ) : null}
+
         <section ref={workspaceAnchorRef} className="workspace-anchor">
           <SectionNav activeView={activeView} onChange={setActiveView} />
 
@@ -756,84 +907,16 @@ function App() {
         </section>
 
         <main className="content-stack">
-          {shareData ? (
-            <ArtifactViewer data={shareData} onBack={clearShare} />
-          ) : null}
-
-          {activeView === 'plan' ? (
-            <>
-              <PlanScreen
-                provider={selectedProvider}
-                model={selectedModel}
-                scenario={scenario}
-                cost={currentCost}
-                insights={insights}
-                costPer1kRequests={costPer1kRequests}
-                costPerUser={costPerUser}
-                alternativeModel={
-                  alternativeModel
-                    ? {
-                        name: alternativeModel.model.name,
-                        recurring: alternativeModel.recurring,
-                        delta: alternativeModel.deltaFromSelected,
-                      }
-                    : null
-                }
-                templates={useCaseTemplates}
-                onScenarioChange={updateScenario}
-                onSaveScenario={saveScenario}
-                onApplyTemplate={applyTemplate}
-                shareArtifact={planShareArtifact}
-              />
-              <RecentScenarios scenarios={savedScenarios} onLoad={loadScenario} />
-            </>
-          ) : null}
-
-          {activeView === 'compare' ? (
-            <CompareScreen
-              models={models}
-              scenario={scenario}
-              selectedModelId={selectedModelId}
-              selectedProviderId={selectedProviderId}
-              savedRoutingStacks={savedRoutingStacks}
-              routingPreset={routingPreset}
-              onSaveRoutingStack={saveRoutingStack}
-              onLoadRoutingStack={loadRoutingStack}
-              shareArtifact={compareShareArtifact}
-            />
-          ) : null}
-
-          {activeView === 'optimize' ? (
-            <OptimizeScreen
-              model={selectedModel}
-              scenario={scenario}
-              insights={insights}
-              optimizationPlan={optimizationPlan}
-            />
-          ) : null}
-
-          {activeView === 'explore' ? (
-            <ExploreScreen
-              templates={useCaseTemplates}
-              models={models}
-              onApplyTemplate={applyTemplate}
-            />
-          ) : null}
-
-          {activeView === 'forecast' ? (
-            <ForecastScreen scenario={scenario} cost={currentCost} />
-          ) : null}
-
-          {activeView === 'portfolio' ? (
-            <PortfolioScreen
-              templates={useCaseTemplates}
-              models={models}
-              savedRoutingStacks={savedRoutingStacks}
-              onApplyTemplate={applyTemplate}
-              onLoadRoutingStack={loadRoutingStack}
-              shareArtifact={portfolioShareArtifact}
-            />
-          ) : null}
+          <section className={`screen-stage screen-stage--${activeView}`}>
+            <div className="screen-stage__header">
+              <div>
+                <span>{activeWorkspacePart.label}</span>
+                <strong>{activeViewSpotlight.label}</strong>
+              </div>
+              <p>{activeViewSpotlight.description}</p>
+            </div>
+            <div className="screen-stage__body">{renderActiveScreen()}</div>
+          </section>
         </main>
       </div>
 

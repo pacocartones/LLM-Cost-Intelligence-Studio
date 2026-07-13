@@ -1,13 +1,19 @@
 import { Icons } from '../components/Icons'
 import type { ViewId } from '../types/domain'
 
-const sections: { id: ViewId; label: string; kicker: string; icon: keyof typeof Icons }[] = [
-  { id: 'plan', label: 'Plan', kicker: 'Shape workload', icon: 'plan' },
-  { id: 'compare', label: 'Compare', kicker: 'Pick default', icon: 'compare' },
-  { id: 'optimize', label: 'Optimize', kicker: 'Cut waste', icon: 'optimize' },
-  { id: 'explore', label: 'Explore', kicker: 'Load patterns', icon: 'explore' },
-  { id: 'forecast', label: 'Forecast', kicker: 'Stress growth', icon: 'forecast' },
-  { id: 'portfolio', label: 'Portfolio', kicker: 'Allocate capital', icon: 'portfolio' },
+const sections: {
+  id: ViewId
+  label: string
+  kicker: string
+  icon: keyof typeof Icons
+  tone: 'plan' | 'compare' | 'optimize' | 'explore' | 'forecast' | 'portfolio'
+}[] = [
+  { id: 'plan', label: 'Plan', kicker: 'Shape workload', icon: 'plan', tone: 'plan' },
+  { id: 'compare', label: 'Compare', kicker: 'Pick default', icon: 'compare', tone: 'compare' },
+  { id: 'optimize', label: 'Optimize', kicker: 'Cut waste', icon: 'optimize', tone: 'optimize' },
+  { id: 'explore', label: 'Explore', kicker: 'Load patterns', icon: 'explore', tone: 'explore' },
+  { id: 'forecast', label: 'Forecast', kicker: 'Stress growth', icon: 'forecast', tone: 'forecast' },
+  { id: 'portfolio', label: 'Portfolio', kicker: 'Allocate capital', icon: 'portfolio', tone: 'portfolio' },
 ]
 
 interface SectionNavProps {
@@ -24,7 +30,7 @@ export function SectionNav({ activeView, onChange }: SectionNavProps) {
           <button
             key={section.id}
             type="button"
-            className={`section-nav__item ${isActive ? 'active' : ''}`}
+            className={`section-nav__item section-nav__item--${section.tone} ${isActive ? 'active' : ''}`}
             onClick={() => onChange(section.id)}
           >
             <span className="section-nav__icon">{Icons[section.icon]}</span>
