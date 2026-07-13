@@ -334,6 +334,37 @@ function App() {
     })
   }, [activeView, scenario, selectedModelId, selectedProviderId, shareData])
 
+  function scrollToWorkspace() {
+    workspaceAnchorRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
+
+  function openView(view: ViewId) {
+    if (view === activeView) {
+      scrollToWorkspace()
+      return
+    }
+
+    setActiveView(view)
+  }
+
+  function returnHome() {
+    if (shareData) {
+      clearShare()
+    }
+
+    if (activeView !== 'plan') {
+      setActiveView('plan')
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }
+
   const selectedModel =
     models.find((model) => model.id === selectedModelId) ?? models[0]
   const selectedProvider =
@@ -735,7 +766,7 @@ function App() {
           <button
             type="button"
             className="site-brand"
-            onClick={() => setActiveView('plan')}
+            onClick={returnHome}
           >
             <span className="site-brand__mark">LCI</span>
             <span className="site-brand__copy">
@@ -777,14 +808,14 @@ function App() {
               <button
                 type="button"
                 className="ghost-button"
-                onClick={() => setActiveView(activeHeroContent.primaryView)}
+                onClick={() => openView(activeHeroContent.primaryView)}
               >
                 {activeHeroContent.primaryLabel}
               </button>
               <button
                 type="button"
                 className="text-link"
-                onClick={() => setActiveView(activeHeroContent.secondaryView)}
+                onClick={() => openView(activeHeroContent.secondaryView)}
               >
                 {activeHeroContent.secondaryLabel}
               </button>
@@ -850,7 +881,7 @@ function App() {
                       type="button"
                       className="ghost-button"
                       aria-pressed={isActive}
-                      onClick={() => setActiveView(step.primaryView)}
+                      onClick={() => openView(step.primaryView)}
                     >
                       {isActive ? 'You are here' : `Open ${viewSpotlights[step.primaryView].label}`}
                     </button>
@@ -937,21 +968,21 @@ function App() {
                 <button
                   type="button"
                   className="ghost-button"
-                  onClick={() => setActiveView('plan')}
+                  onClick={() => openView('plan')}
                 >
                   Tune scenario inputs
                 </button>
                 <button
                   type="button"
                   className="ghost-button"
-                  onClick={() => setActiveView('compare')}
+                  onClick={() => openView('compare')}
                 >
                   Review routing options
                 </button>
                 <button
                   type="button"
                   className="ghost-button"
-                  onClick={() => setActiveView('forecast')}
+                  onClick={() => openView('forecast')}
                 >
                   Stress-test growth
                 </button>
@@ -966,7 +997,7 @@ function App() {
               risk={executiveRisk}
               nextStep={executiveNextStep}
               metrics={executiveMetrics}
-              onPrimaryAction={() => setActiveView(nextJourneyStep.primaryView)}
+              onPrimaryAction={() => openView(nextJourneyStep.primaryView)}
               primaryActionLabel={`Open ${viewSpotlights[nextJourneyStep.primaryView].label}`}
             />
           </>
@@ -995,7 +1026,7 @@ function App() {
                         type="button"
                         className={view === activeView ? 'active' : ''}
                         aria-pressed={view === activeView}
-                        onClick={() => setActiveView(view)}
+                        onClick={() => openView(view)}
                       >
                         {viewSpotlights[view].label}
                       </button>
@@ -1008,7 +1039,7 @@ function App() {
         ) : null}
 
         <section ref={workspaceAnchorRef} className="workspace-anchor">
-          <SectionNav activeView={activeView} onChange={setActiveView} />
+          <SectionNav activeView={activeView} onChange={openView} />
 
           {!shareData ? (
             <section className="view-spotlight">
@@ -1031,7 +1062,7 @@ function App() {
                   <button
                     type="button"
                     className="ghost-button"
-                    onClick={() => setActiveView(activeViewSpotlight.nextView)}
+                    onClick={() => openView(activeViewSpotlight.nextView)}
                   >
                     {activeViewSpotlight.nextLabel}
                   </button>

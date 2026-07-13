@@ -3132,12 +3132,81 @@ select:focus {
     padding-inline: 16px;
   }
 
+  .site-header__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 14px 16px;
+  }
+
+  .site-brand__mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .site-brand__copy small {
+    display: none;
+  }
+
+  .site-header__status {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .topbar {
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .topbar-main {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .topbar h1 {
+    font-size: clamp(1.9rem, 10vw, 2.8rem);
+    margin: 0;
+  }
+
+  .hero-copy {
+    font-size: var(--text-base);
+  }
+
   .hero-pill-row {
     gap: 8px;
+    margin-top: 0;
+  }
+
+  .hero-action-row {
+    margin-top: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-action-row .ghost-button,
+  .hero-action-row .text-link {
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-full);
+  }
+
+  .hero-action-row .text-link {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
   }
 
   .section-nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(148px, 1fr);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    padding-bottom: 6px;
   }
 
   .overview-band,
@@ -3166,6 +3235,69 @@ select:focus {
     grid-template-columns: 1fr;
   }
 
+  .guided-workflow__grid,
+  .overview-band,
+  .trust-band,
+  .workspace-parts,
+  .command-center__grid,
+  .executive-brief__metrics,
+  .compare-tray__grid,
+  .builder-stage-grid,
+  .scenario-cockpit-grid,
+  .growth-preview__grid,
+  .forecast-command-grid,
+  .portfolio-command-grid,
+  .optimize-command-grid,
+  .explore-command-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(82%, 1fr);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 6px;
+  }
+
+  .section-nav,
+  .guided-workflow__grid,
+  .overview-band,
+  .trust-band,
+  .workspace-parts,
+  .command-center__grid,
+  .executive-brief__metrics,
+  .compare-tray__grid,
+  .builder-stage-grid,
+  .scenario-cockpit-grid,
+  .growth-preview__grid,
+  .forecast-command-grid,
+  .portfolio-command-grid,
+  .optimize-command-grid,
+  .explore-command-grid {
+    scrollbar-width: thin;
+  }
+
+  .section-nav__item,
+  .guided-step,
+  .overview-card,
+  .trust-card,
+  .workspace-part-card,
+  .command-card,
+  .executive-metric,
+  .compare-tray__card,
+  .builder-stage-card,
+  .scenario-cockpit-card,
+  .growth-preview-card,
+  .forecast-command-card,
+  .portfolio-command-card,
+  .optimize-command-card,
+  .explore-command-card {
+    scroll-snap-align: start;
+  }
+
+  .section-nav__item {
+    min-height: 88px;
+  }
+
   .site-header__nav {
     overflow-x: auto;
     padding-bottom: 4px;
@@ -3180,8 +3312,37 @@ select:focus {
     border-radius: 24px;
   }
 
-  .site-header__status {
-    width: 100%;
+  .guided-workflow,
+  .executive-brief,
+  .command-center {
+    padding: var(--space-4);
+  }
+
+  .topbar-card {
+    padding: var(--space-4);
+  }
+
+  .topbar-card__metrics,
+  .plan-brief__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .topbar-card__metrics div,
+  .plan-brief__stats div {
+    display: grid;
+    gap: 4px;
+  }
+
+  .topbar-card__metrics strong,
+  .plan-brief__stats strong {
+    margin: 0;
+    font-size: var(--text-base);
+  }
+
+  .topbar-card__metrics span,
+  .plan-brief__stats span {
+    font-size: var(--text-xs);
   }
 
   .site-footer__inner {
